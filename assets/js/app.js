@@ -16,13 +16,19 @@ jQuery(function($) {
         window.alert('Please install MetaMask first.');
     }
 
+    // prevent default sign-in
+    // todo allow plugin option for password fallback, if user doesn't have metamask installed.
+    // $(document).on('submit', '#loginform', function(event) {
+    //     event.preventDefault();
+    // });
+
     function init() {
 
         // create sign-in
         // todo allow translation button text.
         $('#loginform #user_login').parent().append('<div style="text-align: center;"><button type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_eth-signIn">Sign in with Ethereum</button></div>');
 
-        // todo set button loading
+        // todo set button loading icon state
 
         if (typeof window.ethereum !== 'undefined') {
 
@@ -65,14 +71,18 @@ jQuery(function($) {
                         _ajax_nonce: wp_eth_login.nonce,
                         data: formData,
                     },
-                    function (response) {        
+                    function (response) {
+                        if (!response.success) {
+                            // todo display error output
+                            window.alert(response.data);
+                            window.location.reload(true);
+                        }
                         if (!response.success) return;
                         if (!response.data.redirect_url) return;
 
                         // redirect without caching.
-                        // todo see if we can do this without timestamp
                         let redirectUrl = response.data.redirect_url;
-                        window.location.href = redirectUrl + (redirectUrl[redirectUrl.length-1] === '?' ? '' : '?') + new Date().getTime();
+                        window.location.href = redirectUrl;
         
                     }
                 );

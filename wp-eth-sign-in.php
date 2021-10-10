@@ -23,6 +23,9 @@ if (!defined('WPINC')) {
     die('Hey there...');
 }
 
+// todo allow plugin option for password fallback, if user doesn't have metamask installed.
+// options: disable password sign-in, allow password sign-in fallback for users without metamask (default).
+
 function wp_eth_enqueue_scripts()
 {
     wp_enqueue_style('wp-eth', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/css/app.css', array(), '1.0.0');
@@ -45,6 +48,7 @@ function wp_eth_login()
 
     $public_address = sanitize_post($post_data['public_address'], 'raw');
     $user_login     = sanitize_user($post_data['user_login']);
+    $_ajax_nonce    = sanitize_post($_POST['_ajax_nonce']);
 
     if (empty($user_login)) {
         wp_send_json_error('Username / email not specified.');
@@ -73,13 +77,45 @@ function wp_eth_login()
     // log the user in.
     wp_set_auth_cookie($user_id);
 
-    $redirect_url = admin_url();
+    $redirect_url = wp_nonce_url(admin_url(), $_ajax_nonce);
 
     // return values
     $data = array(
-        'redirect_url' => $redirect_url,
+        'redirect_url' => esc_url($redirect_url),
     );
     wp_send_json_success($data);
 }
 add_action('wp_ajax_wp_eth_login', 'wp_eth_login');
 add_action('wp_ajax_nopriv_wp_eth_login', 'wp_eth_login');
+
+/**
+ * On user post meta update, if it contains an eth address, then sign the user out, for security.
+ *
+ * @param int    $meta_id     ID of updated metadata entry.
+ * @param int    $object_id   ID of the object metadata is for.
+ * @param string $meta_key    Metadata key.
+ * @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
+ * @return void
+ */
+function wp_eth_user_public_address_updated($meta_id, $object_id, $meta_key, $_meta_value)
+{
+
+    if ($meta_key !== 'wp_eth_public_address') {
+        return;
+    }
+
+    // if meta_value has become invalid eth address, then sign the user out.
+    if (!preg_match('/^0x[a-fA-F0-9]{40}$/', $_meta_value)) {
+
+        $user = get_userdata((int) $object_id);
+
+        if (!$user) {
+            return;
+        }
+
+        $sessions = WP_Session_Tokens::get_instance($user->ID);
+
+        $sessions->destroy_all();
+    }
+}
+add_action('updated_user_meta', 'wp_eth_user_public_address_updated', 10, 4);

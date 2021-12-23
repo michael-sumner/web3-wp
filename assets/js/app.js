@@ -1,6 +1,6 @@
 jQuery(function($) {
 
-    // todo keep username/email, so people are not so doubtful of ethereum sign-in.
+    // todo keep username/email, so people are not so doubtful of web3 sign-in.
     // todo plugin setting: hide username/email input field.
 
     // hide unnecessary fields.
@@ -26,13 +26,13 @@ jQuery(function($) {
 
         // create sign-in
         // todo allow translation button text.
-        $('#loginform #user_login').parent().append('<div style="text-align: center;"><button type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_eth-signIn">Sign in with Ethereum</button></div>');
+        $('#loginform #user_login').parent().append('<div style="text-align: center;"><button type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Sign in with Web3</button></div>');
 
         // todo set button loading icon state
 
         if (typeof window.ethereum !== 'undefined') {
 
-            $(document).on('click', '.js-c-wp_eth-signIn', function(event) {
+            $(document).on('click', '.js-c-wp_web3-signIn', function(event) {
                 event.preventDefault();
                 maybeSignIn();
 
@@ -66,9 +66,9 @@ jQuery(function($) {
 
                 // todo ajax
                 $.post(
-                    wp_eth_login.ajaxurl, {
-                        action: 'wp_eth_login',
-                        _ajax_nonce: wp_eth_login.nonce,
+                    wp_web3_login.ajaxurl, {
+                        action: 'wp_web3_login',
+                        _ajax_nonce: wp_web3_login.nonce,
                         data: formData,
                     },
                     function (response) {

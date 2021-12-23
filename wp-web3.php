@@ -2,20 +2,20 @@
 
 /**
  * @wordpress-plugin
- * Plugin Name: WP Ethereum Login
- * Description: Allow your users to log into your WordPress site using Ethereum sign-on.
+ * Plugin Name: WP Web 3.0
+ * Description: Allow your users to log into your WordPress site using Web 3.0 sign-on.
  * Version: 1.0.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
  * Author: Michael Bryan Sumner
- * Author URI: https://smnr.co/wp-eth-login
+ * Author URI: https://smnr.co/wp-web3
  * License: GPL-2.0+
- * Text Domain: wp-eth-login
+ * Text Domain: wp-web3
  * Domain Path: /languages
  *
- * @link https://smnr.co/wp-eth-login
+ * @link https://smnr.co/wp-web3
  * @since 1.0.0
- * @package WP_Ethereum_Login
+ * @package WP_Web3_Login
  */
 
 // If this file is called directly, abort.
@@ -26,18 +26,18 @@ if (!defined('WPINC')) {
 // todo allow plugin option for password fallback, if user doesn't have metamask installed.
 // options: disable password sign-in, allow password sign-in fallback for users without metamask (default).
 
-function wp_eth_enqueue_scripts()
+function wp_web3_enqueue_scripts()
 {
-    wp_enqueue_style('wp-eth', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/css/app.css', array(), '1.0.0');
-    wp_enqueue_script('wp-eth-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/js/web3.min.js', array(), '1.2.84', true);
-    wp_enqueue_script('wp-eth', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/js/app.js', array('jquery'), '1.0.0', true);
-    wp_localize_script('wp-eth', 'wp_eth_login', array('nonce' => wp_create_nonce('wp_eth_login_nonce'), 'ajaxurl' => admin_url('admin-ajax.php')));
+    wp_enqueue_style('wp-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/css/app.css', array(), '1.0.0');
+    wp_enqueue_script('wp-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/js/web3.min.js', array(), '1.2.84', true);
+    wp_enqueue_script('wp-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/js/app.js', array('jquery'), '1.0.0', true);
+    wp_localize_script('wp-web3', 'wp_web3_login', array('nonce' => wp_create_nonce('wp_web3_login_nonce'), 'ajaxurl' => admin_url('admin-ajax.php')));
 }
-add_action('login_enqueue_scripts', 'wp_eth_enqueue_scripts');
+add_action('login_enqueue_scripts', 'wp_web3_enqueue_scripts');
 
-function wp_eth_login()
+function wp_web3_login()
 {
-    check_ajax_referer('wp_eth_login_nonce');
+    check_ajax_referer('wp_web3_login_nonce');
 
     if (!isset($_POST['data'])) {
         wp_send_json_error();
@@ -72,7 +72,7 @@ function wp_eth_login()
     }
 
     // update user meta.
-    update_user_meta($user_id, 'wp_eth_public_address', $public_address);
+    update_user_meta($user_id, 'wp_web3_public_address', $public_address);
 
     // log the user in.
     wp_set_auth_cookie($user_id);
@@ -85,8 +85,8 @@ function wp_eth_login()
     );
     wp_send_json_success($data);
 }
-add_action('wp_ajax_wp_eth_login', 'wp_eth_login');
-add_action('wp_ajax_nopriv_wp_eth_login', 'wp_eth_login');
+add_action('wp_ajax_wp_web3_login', 'wp_web3_login');
+add_action('wp_ajax_nopriv_wp_web3_login', 'wp_web3_login');
 
 /**
  * On user post meta update, if it contains an eth address, then sign the user out, for security.
@@ -97,10 +97,10 @@ add_action('wp_ajax_nopriv_wp_eth_login', 'wp_eth_login');
  * @param mixed  $_meta_value Metadata value. Serialized if non-scalar.
  * @return void
  */
-function wp_eth_user_public_address_updated($meta_id, $object_id, $meta_key, $_meta_value)
+function wp_web3_user_public_address_updated($meta_id, $object_id, $meta_key, $_meta_value)
 {
 
-    if ($meta_key !== 'wp_eth_public_address') {
+    if ($meta_key !== 'wp_web3_public_address') {
         return;
     }
 
@@ -118,4 +118,4 @@ function wp_eth_user_public_address_updated($meta_id, $object_id, $meta_key, $_m
         $sessions->destroy_all();
     }
 }
-add_action('updated_user_meta', 'wp_eth_user_public_address_updated', 10, 4);
+add_action('updated_user_meta', 'wp_web3_user_public_address_updated', 10, 4);

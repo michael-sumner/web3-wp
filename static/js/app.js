@@ -2,6 +2,7 @@ jQuery(function($) {
 
     // todo keep username/email, so people are not so doubtful of web3 sign-in.
     // todo plugin setting: hide username/email input field. Warning, users may be able to spam the form...
+    // todo plugin setting: hide password input field. This will introduce users to web3 as a powerful passwordless login.
 
     // hide unnecessary fields.
     $('#loginform .user-pass-wrap').remove();
@@ -38,8 +39,8 @@ jQuery(function($) {
 
     function init() {
 
-        if (typeof wp_web3.pluginurl === 'undefined') {
-            throw new TypeError('wp_web3.pluginurl is not defined');
+        if (typeof wp_web3_login.pluginurl === 'undefined') {
+            throw new TypeError('wp_web3_login.pluginurl is not defined');
         }
 
         // create sign-in
@@ -71,7 +72,7 @@ jQuery(function($) {
                                         <div class="sc-us24id-2 jHqHqW">
                                             <div color="#E8831D" class="sc-us24id-6 cwjrNn">MetaMask</div>
                                         </div>
-                                        <div class="sc-us24id-8 koEAFT"><img src="${wp_web3.pluginurl}static/media/metamask.02e3ec27.png" alt="Icon">
+                                        <div class="sc-us24id-8 koEAFT"><img src="${wp_web3_login.pluginurl}static/media/metamask.02e3ec27.png" alt="Icon">
                                         </div>
                                     </button>
                                     <div class="sc-14xbiak-0 gtyZtN" style="display: none;">
@@ -88,7 +89,7 @@ jQuery(function($) {
                                                 <div color="#E8831D" class="sc-us24id-6 cwjrNn">MetaMask</div>
                                                 <div class="sc-us24id-7 fgFWsd">Easy-to-use browser extension.</div>
                                             </div>
-                                            <div class="sc-us24id-8 koEAFT"><img src="${wp_web3.pluginurl}static/media/metamask.02e3ec27.png" alt="Icon"></div>
+                                            <div class="sc-us24id-8 koEAFT"><img src="${wp_web3_login.pluginurl}static/media/metamask.02e3ec27.png" alt="Icon"></div>
                                         </button>
                                     </div>
                                 </div>
@@ -140,9 +141,9 @@ jQuery(function($) {
 
                 // todo ajax
                 $.post(
-                    wp_web3.ajaxurl, {
+                    wp_web3_login.ajaxurl, {
                         action: 'wp_web3',
-                        _ajax_nonce: wp_web3.nonce,
+                        _ajax_nonce: wp_web3_login.nonce,
                         data: formData,
                     },
                     function (response) {

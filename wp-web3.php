@@ -31,17 +31,19 @@ function wp_web3_enqueue_scripts()
     wp_enqueue_style('wp-web3', plugin_dir_url(__FILE__) . 'static/css/app.css', array(), '1.0.0');
     wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'static/js/web3.min.js', array(), '1.2.84', true);
     wp_enqueue_script('wp-web3-app', plugin_dir_url(__FILE__) . 'static/js/app.js', array('jquery'), '1.0.0', true);
-    wp_localize_script('wp-web3', 'wp_web3', array(
-        'nonce'     => wp_create_nonce('wp_web3_nonce'),
+    wp_localize_script('wp-web3', 'wp_web3_login', array(
+        'nonce'     => wp_create_nonce('wp_web3_login_nonce'),
         'ajaxurl'   => admin_url('admin-ajax.php'),
         'pluginurl' => plugin_dir_url(__FILE__),
     ));
 }
 add_action('login_enqueue_scripts', 'wp_web3_enqueue_scripts');
 
-function wp_web3()
+function wp_web3_login()
 {
-    check_ajax_referer('wp_web3_nonce');
+    // todo Add Error: User does not exist with address.
+    // todo remove username / email.
+    check_ajax_referer('wp_web3_login_nonce');
 
     if (!isset($_POST['data'])) {
         wp_send_json_error();
@@ -89,8 +91,8 @@ function wp_web3()
     );
     wp_send_json_success($data);
 }
-add_action('wp_ajax_wp_web3', 'wp_web3');
-add_action('wp_ajax_nopriv_wp_web3', 'wp_web3');
+add_action('wp_ajax_wp_web3', 'wp_web3_login');
+add_action('wp_ajax_nopriv_wp_web3', 'wp_web3_login');
 
 /**
  * On user post meta update, if it contains an eth address, then sign the user out, for security.

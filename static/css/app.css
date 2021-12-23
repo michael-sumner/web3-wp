@@ -1,0 +1,297 @@
+.js-c-wp_web3-signIn {
+    width: 100%;
+    background-color: #1c1ce1 !important;
+    color: #fff !important;
+    border-color: #1c1ce1 !important;
+    box-shadow: none !important;
+    transition: .3s !important;
+    background-image: url('../images/eth-diamond-rainbow.png') !important;
+    background-size: 20px !important;
+    background-repeat: no-repeat !important;
+    background-position: 14px !important;
+    padding-left: calc(36px + 14px) !important;
+    padding-right: calc(36px - 14px) !important;
+}
+.js-c-wp_web3-signIn:hover,
+.js-c-wp_web3-signIn:focus,
+.js-c-wp_web3-signIn:active {
+    box-shadow: none !important;
+    border-color: rgba(28, 28, 225, 0.8) !important;
+    background-color: rgba(28, 28, 225, 0.8) !important;
+}
+
+:root {
+    --reach-dialog: 1
+}
+
+[data-reach-dialog-overlay] {
+    background: rgba(0, 0, 0, .33);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto
+}
+
+[data-reach-dialog-content] {
+    width: 50vw;
+    margin: 10vh auto;
+    background: #fff;
+    padding: 2rem;
+    outline: none
+}
+
+@font-face {
+    font-family: "Inter var";
+    font-weight: 100 900;
+    font-style: normal;
+    font-named-instance: "Regular";
+    src: url(../../static/media/Inter-roman.var.b65534c5.woff2) format("woff2 supports variations(gvar)"), url(../../static/media/Inter-roman.var.b65534c5.woff2) format("woff2-variations"), url(../../static/media/Inter-roman.var.b65534c5.woff2) format("woff2")
+}
+
+
+.llYYyh[data-reach-dialog-overlay] {
+    color: rgb(255, 255, 255);
+    z-index: 2;
+    overflow: hidden;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.424);
+    font-family: 'Inter var', sans-serif;
+    font-size: 16px;
+    font-variant: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    font-feature-settings: 'ss01' on,'ss02' on,'cv01' on,'cv03' on;
+}
+[data-reach-dialog-overlay] {
+    background: rgba(0,0,0,.33);
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: auto;
+}
+.cTUQSm {
+    overflow-y: auto;
+}
+[data-reach-dialog-content] {
+    width: 50vw;
+    margin: 10vh auto;
+    background: #fff;
+    padding: 2rem;
+    outline: none;
+}
+.cTUQSm[data-reach-dialog-content] {
+    margin: 0px 0px 2rem;
+    background-color: rgb(25, 27, 31);
+    border: 1px solid rgb(33, 36, 41);
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 8px 0px;
+    padding: 0px;
+    width: 50vw;
+    overflow: hidden auto;
+    align-self: center;
+    max-width: 420px;
+    max-height: 90vh;
+    display: flex;
+    border-radius: 20px;
+}
+@media (max-width: 960px) {
+    .cTUQSm[data-reach-dialog-content] {
+        width: 65vw;
+        margin: 0px;
+    }
+}
+@media (max-width: 720px) {
+    .cTUQSm[data-reach-dialog-content] {
+        width: 85vw;
+    }
+}
+
+.krQIyi {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+.ftSGZx {
+    position: relative;
+}
+.ddnRyg {
+    position: absolute;
+    right: 1rem;
+    top: 14px;
+}
+.ddnRyg:hover {
+    cursor: pointer;
+    opacity: 0.6;
+}
+.gvzZBq {
+    display: flex;
+    flex-flow: row nowrap;
+    padding: 1rem;
+    font-weight: 500;
+    color: inherit;
+}
+@media (max-width: 960px) {
+    .gvzZBq {
+        padding: 1rem;
+    }
+}
+.egLPnp:hover {
+    cursor: pointer;
+}
+.egLPnp {
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+.cYHWmo {
+    background-color: rgb(25, 27, 31);
+    padding: 0px 1rem 1rem;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+@media (max-width: 960px) {
+    .cYHWmo {
+        padding: 0px 1rem 1rem;
+    }
+}
+.eYlBaO {
+    display: grid;
+    gap: 10px;
+}
+@media (max-width: 960px) {
+    .eYlBaO {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+}
+.PBzB {
+    display: flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+.fAwvab {
+    margin-top: 0px;
+    opacity: 1;
+}
+.fAwvab:hover {
+    cursor: pointer;
+    border: 1px solid rgb(33, 114, 229);
+}
+
+.kUkPXg {
+    background-color: rgb(44, 47, 54);
+    padding: 1rem;
+    outline: none;
+    border: 1px solid rgb(64, 68, 79);
+    border-radius: 12px;
+    width: 100% !important;
+}
+.kUkPXg:focus {
+    box-shadow: rgb(33 114 229) 0px 0px 0px 1px;
+}
+button {
+    user-select: none;
+}
+.jHqHqW {
+    display: flex;
+    flex-flow: column nowrap;
+    -webkit-box-pack: center;
+    justify-content: center;
+    height: 100%;
+}
+.cwjrNn {
+    display: flex;
+    flex-flow: row nowrap;
+    color: rgb(255, 255, 255);
+    font-size: 1rem;
+    font-weight: 500;
+}
+.koEAFT {
+    display: flex;
+    flex-flow: column nowrap;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+@media (max-width: 960px) {
+    .koEAFT {
+        align-items: flex-end;
+    }
+}
+.koEAFT > img, .koEAFT span {
+    height: 24px;
+    width: 24px;
+}
+.goEtRe {
+    display: flex;
+    flex-flow: row nowrap;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    color: inherit;
+    border: 1px solid rgb(178, 185, 210);
+}
+.gtyZtN > * {
+    width: 100%;
+}
+.fPlLvh {
+    margin-top: 0px;
+    opacity: 1;
+}
+.iRbKAI {
+    display: flex;
+    flex-flow: row nowrap;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+.goEtRe > * {
+    padding: 1rem;
+}
+.kBRrmU {
+    margin-right: 1rem;
+}
+.iOprLv {
+    animation: 2s linear 0s infinite normal none running fvtopB;
+    height: 16px;
+    width: 16px;
+}
+.iOprLv path {
+    stroke: rgb(33, 114, 229);
+}
+.fgFWsd {
+    color: rgb(255, 255, 255);
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+@keyframes fvtopB {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

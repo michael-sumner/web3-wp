@@ -28,16 +28,20 @@ if (!defined('WPINC')) {
 
 function wp_web3_enqueue_scripts()
 {
-    wp_enqueue_style('wp-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/css/app.css', array(), '1.0.0');
-    wp_enqueue_script('wp-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/js/web3.min.js', array(), '1.2.84', true);
-    wp_enqueue_script('wp-web3', plugins_url() . '/' . basename(__FILE__, '.php') . '/assets/js/app.js', array('jquery'), '1.0.0', true);
-    wp_localize_script('wp-web3', 'wp_web3_login', array('nonce' => wp_create_nonce('wp_web3_login_nonce'), 'ajaxurl' => admin_url('admin-ajax.php')));
+    wp_enqueue_style('wp-web3', plugin_dir_url(__FILE__) . 'static/css/app.css', array(), '1.0.0');
+    wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'static/js/web3.min.js', array(), '1.2.84', true);
+    wp_enqueue_script('wp-web3-app', plugin_dir_url(__FILE__) . 'static/js/app.js', array('jquery'), '1.0.0', true);
+    wp_localize_script('wp-web3', 'wp_web3', array(
+        'nonce'     => wp_create_nonce('wp_web3_nonce'),
+        'ajaxurl'   => admin_url('admin-ajax.php'),
+        'pluginurl' => plugin_dir_url(__FILE__),
+    ));
 }
 add_action('login_enqueue_scripts', 'wp_web3_enqueue_scripts');
 
-function wp_web3_login()
+function wp_web3()
 {
-    check_ajax_referer('wp_web3_login_nonce');
+    check_ajax_referer('wp_web3_nonce');
 
     if (!isset($_POST['data'])) {
         wp_send_json_error();
@@ -85,8 +89,8 @@ function wp_web3_login()
     );
     wp_send_json_success($data);
 }
-add_action('wp_ajax_wp_web3_login', 'wp_web3_login');
-add_action('wp_ajax_nopriv_wp_web3_login', 'wp_web3_login');
+add_action('wp_ajax_wp_web3', 'wp_web3');
+add_action('wp_ajax_nopriv_wp_web3', 'wp_web3');
 
 /**
  * On user post meta update, if it contains an eth address, then sign the user out, for security.
@@ -99,7 +103,6 @@ add_action('wp_ajax_nopriv_wp_web3_login', 'wp_web3_login');
  */
 function wp_web3_user_public_address_updated($meta_id, $object_id, $meta_key, $_meta_value)
 {
-
     if ($meta_key !== 'wp_web3_public_address') {
         return;
     }

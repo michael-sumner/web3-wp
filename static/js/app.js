@@ -5,6 +5,7 @@ jQuery(function($) {
     // todo plugin setting: hide password input field. This will introduce users to web3 as a powerful passwordless login.
 
     // hide unnecessary fields.
+    $('#loginform #user_login').closest('p').remove();
     $('#loginform .user-pass-wrap').remove();
     $('#loginform #wp-submit').remove();
     $('#loginform .forgetmenot').remove();
@@ -122,21 +123,24 @@ jQuery(function($) {
     }
 
     function maybeSignIn() {
-        let userLogin, publicAddress, formData;
+        let publicAddress, formData;
         
         // todo replace with popup multi-wallet connect.
         try {
+
+            let currentAccount = null;
+
             // Request account access if needed
             async function requestPublicAddress() {
-                return publicAddress = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                return publicAddress = await window.ethereum.request({ method: 'eth_accounts' });
             }
 
-            requestPublicAddress().then(function() {
-                userLogin = $('#user_login').val();
+            requestPublicAddress()
+                .then(handleAccountsChanged)
+                .then(function() {
 
                 formData = {
                     public_address: publicAddress,
-                    user_login: userLogin,
                 };
 
                 // todo ajax
@@ -148,7 +152,6 @@ jQuery(function($) {
                     },
                     function (response) {
                         if (!response.success) {
-                            // todo display error output
                             window.alert(response.data);
                             window.location.reload(true);
                         }
@@ -163,8 +166,18 @@ jQuery(function($) {
                 );
             });
 
+            function handleAccountsChanged(accounts) {
+                if (accounts.length === 0) {
+                    // MetaMask is locked or the user has not connected any accounts
+                    console.log('Please connect to MetaMask.');
+                } else if (accounts[0] !== currentAccount) {
+                    currentAccount = accounts[0];
+                    // Do any other work!
+                }
+            }
+
         } catch (error) {
-            window.alert('You need to allow MetaMask.');
+            window.alert(error);
             return;
         }
     }

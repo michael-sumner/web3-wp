@@ -15,7 +15,7 @@
  *
  * @link https://smnr.co/wp-web3
  * @since 1.0.0
- * @package WP_Web3_Login
+ * @package WP_Web3
  */
 
 // If this file is called directly, abort.
@@ -41,8 +41,6 @@ add_action('login_enqueue_scripts', 'wp_web3_enqueue_scripts');
 
 function wp_web3_login()
 {
-    // todo Add Error: User does not exist with address.
-    // todo remove username / email.
     check_ajax_referer('wp_web3_login_nonce');
 
     if (!isset($_POST['data'])) {
@@ -50,28 +48,40 @@ function wp_web3_login()
     }
 
     // retrieve values and sanitize.
-    $post_data = $_POST['data'];
-
+    $post_data      = $_POST['data'];
     $public_address = sanitize_post($post_data['public_address'], 'raw');
-    $user_login     = sanitize_user($post_data['user_login']);
-    $_ajax_nonce    = sanitize_post($_POST['_ajax_nonce']);
 
-    if (empty($user_login)) {
-        wp_send_json_error('Username / email not specified.');
+    if (empty($public_address)) {
+        wp_send_json_error('Address does not exist.');
     }
 
-    // check $user_login
-    if (strpos($user_login, '@')) {
-        // sanitize user email
-        $user_login = sanitize_email($user_login);
-        $user_data  = get_user_by('email', trim(wp_unslash($user_login)));
-    } else {
-        // sanitize username
-        $user_login = sanitize_user($user_login);
-        $user_data  = get_user_by('login', trim(wp_unslash($user_login)));
+    // search for user within usermeta.
+    global $wpdb;
+    $like = '%' . $wpdb->esc_like($public_address[0]) . '%';
+    $user = $wpdb->get_row(
+        $wpdb->prepare(
+            "SELECT *
+            FROM $wpdb->usermeta
+            WHERE `meta_key` = 'wp_web3_public_address' AND
+            `meta_value` LIKE %s
+            LIMIT 1",
+            $like
+        )
+    );
+
+    if (!$user) {
+        wp_send_json_error(
+            wp_sprintf(
+                __('User with Web3 address %s does not exist.', 'wp-web3'),
+                $public_address[0]
+            )
+        );
     }
 
-    $user_id = $user_data->ID;
+    update_user_caches($user);
+
+    $_ajax_nonce = sanitize_post($_POST['_ajax_nonce']);
+    $user_id     = absint($user->user_id);
 
     if (!$user_id) {
         wp_send_json_error('User does not exist');
@@ -89,6 +99,7 @@ function wp_web3_login()
     $data = array(
         'redirect_url' => esc_url($redirect_url),
     );
+
     wp_send_json_success($data);
 }
 add_action('wp_ajax_wp_web3', 'wp_web3_login');

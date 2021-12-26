@@ -121,9 +121,9 @@ function wp_web3_user_public_address_updated($meta_id, $object_id, $meta_key, $_
     }
 
     // if meta_value has become invalid eth address, then sign the user out.
-    if (!preg_match('/^0x[a-fA-F0-9]{40}$/', $_meta_value)) {
+    if (!preg_match('/^0x[a-fA-F\d]{40}$/', $_meta_value)) {
 
-        $user = get_userdata((int) $object_id);
+        $user = get_userdata(absint($object_id));
 
         if (!$user) {
             return;

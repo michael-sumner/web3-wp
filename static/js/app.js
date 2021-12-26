@@ -1,22 +1,15 @@
 jQuery(function($) {
 
-    // todo keep username/email, so people are not so doubtful of web3 sign-in.
-    // todo plugin setting: hide username/email input field. Warning, users may be able to spam the form...
-    // todo plugin setting: hide password input field. This will introduce users to web3 as a powerful passwordless login.
-
-    // hide unnecessary fields.
-    $('#loginform #user_login').closest('p').remove();
-    $('#loginform .user-pass-wrap').remove();
-    $('#loginform #wp-submit').remove();
-    $('#loginform .forgetmenot').remove();
-
-    // todo replace with popup multi-wallet connect.
     // Check if MetaMask is installed
-    if (typeof window.ethereum !== 'undefined') {
-        init();
-    } else {
-        // todo use better error output
-        window.alert('Please install MetaMask first.');
+    try {
+        if (typeof window.ethereum !== 'undefined') {
+            init();
+        } else {
+            let err = new Error('Please install MetaMask first.');
+            throw err;
+        }        
+    } catch (error) {
+        window.alert(error);
     }
 
     $(document).on('click', '.sc-1hmbv05-0', function() {
@@ -31,27 +24,20 @@ jQuery(function($) {
         maybeSignIn();
     });
 
-    // prevent default sign-in
-    // todo replace with popup multi-wallet connect.
-    // todo allow plugin option for password fallback, if user doesn't have metamask installed.
-    // $(document).on('submit', '#loginform', function(event) {
-    //     event.preventDefault();
-    // });
-
     function init() {
-
         if (typeof wp_web3_login.pluginurl === 'undefined') {
             throw new TypeError('wp_web3_login.pluginurl is not defined');
         }
 
+        // hide unnecessary fields.
+        $('#loginform #user_login').closest('p').remove();
+        $('#loginform .user-pass-wrap').remove();
+        $('#loginform #wp-submit').remove();
+        $('#loginform .forgetmenot').remove();
+
         // create sign-in
         // todo allow translation button text.
-        $('#loginform').append(`
-            <div style="display: block; clear: both;"></div>
-            <div style="text-align: center; margin-top: 1rem;">
-                <button type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Connect to a wallet</button>
-            </div>
-
+        $('#login').append(`
             <div class="sc-jajvtp-0 llYYyh" data-reach-dialog-overlay="" style="opacity: 1; display: none;">
                 <div aria-modal="true" role="dialog" tabindex="-1" aria-label="dialog" class="sc-jajvtp-1 cTUQSm"
                     data-reach-dialog-content="">
@@ -101,84 +87,88 @@ jQuery(function($) {
             </div>
         `);
 
-        // todo set button loading icon state
-
-        if (typeof window.ethereum !== 'undefined') {
-
-            $(document).on('click', '.js-c-wp_web3-signIn', function(event) {
-                event.preventDefault();
-                // todo replace with popup multi-wallet connect.
-                // maybeSignIn();
-
-            });
-
-            $(document).on('submit', '#loginform', function(event) {
-                event.preventDefault();
-                // todo replace with popup multi-wallet connect.
-                // maybeSignIn();
-            });
-    
-        }
-
+        $('#loginform').append(`
+            <div style="display: block; clear: both;"></div>
+            <div style="text-align: center; margin-top: 1rem;">
+                <button type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Connect to a wallet</button>
+            </div>
+        `);
     }
 
     function maybeSignIn() {
         let publicAddress, formData;
-        
-        // todo replace with popup multi-wallet connect.
-        try {
 
+        function handleError(error) {
+            window.alert(error);
+            window.location.reload(true);
+            throw error;
+        }
+
+        try {
             let currentAccount = null;
 
             // Request account access if needed
             async function requestPublicAddress() {
-                return publicAddress = await window.ethereum.request({ method: 'eth_accounts' });
+                return publicAddress = await window.ethereum.request({
+                    method: 'eth_requestAccounts',
+                });
             }
 
             requestPublicAddress()
                 .then(handleAccountsChanged)
                 .then(function() {
 
-                formData = {
-                    public_address: publicAddress,
-                };
+                    formData = {
+                        public_address: publicAddress,
+                    };
 
-                // todo ajax
-                $.post(
-                    wp_web3_login.ajaxurl, {
-                        action: 'wp_web3',
-                        _ajax_nonce: wp_web3_login.nonce,
-                        data: formData,
-                    },
-                    function (response) {
-                        if (!response.success) {
-                            window.alert(response.data);
-                            window.location.reload(true);
+                    // todo ajax
+                    $.post(
+                        wp_web3_login.ajaxurl, {
+                            action: 'wp_web3',
+                            _ajax_nonce: wp_web3_login.nonce,
+                            data: formData,
+                        },
+                        function (response) {
+                            if (!response.success) {
+                                handleError(response.data);
+                            }
+                            if (!response.success) return;
+                            if (!response.data.redirect_url) return;
+
+                            // redirect without caching.
+                            let redirectUrl = response.data.redirect_url;
+                            window.location.href = redirectUrl;
+            
                         }
-                        if (!response.success) return;
-                        if (!response.data.redirect_url) return;
-
-                        // redirect without caching.
-                        let redirectUrl = response.data.redirect_url;
-                        window.location.href = redirectUrl;
-        
-                    }
-                );
-            });
+                    );
+                })
+                .catch(error => handleError(error));
 
             function handleAccountsChanged(accounts) {
+                // WARNING: EXPLOIT:
+                // Create debug breakpoint before accounts.length.
+                // You can then inject accounts[0] as a specified identified address registered in the app's database...
+                // Which means that since the wallet address exists in the app's database, the user is authenticated.
+                // This is a security risk, but it's a good one.
                 if (accounts.length === 0) {
                     // MetaMask is locked or the user has not connected any accounts
-                    console.log('Please connect to MetaMask.');
+                    let err = new Error('Please connect at least 1 Web3 account from MetaMask to this app.');
+                    throw err;
                 } else if (accounts[0] !== currentAccount) {
                     currentAccount = accounts[0];
-                    // Do any other work!
+                    let err = new Error('Please connect a valid Web3 address.');
+                    // check that web3 address matches regex pattern
+                    if (!/^0x[a-fA-F\d]{40}$/.test(currentAccount)) {
+                        throw err;
+                    }
                 }
             }
 
+
+
         } catch (error) {
-            window.alert(error);
-            return;
+            handleError(error);
         }
     }
 

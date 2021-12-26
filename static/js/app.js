@@ -151,6 +151,8 @@ jQuery(function($) {
                 // You can then inject accounts[0] as a specified identified address registered in the app's database...
                 // Which means that since the wallet address exists in the app's database, the user is authenticated.
                 // This is a security risk, but it's a good one.
+                // todo consider https://metamask.github.io/test-dapp/
+                // Personal Sign personal_ecRecover
                 if (accounts.length === 0) {
                     // MetaMask is locked or the user has not connected any accounts
                     let err = new Error('Please connect at least 1 Web3 account from MetaMask to this app.');

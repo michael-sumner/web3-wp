@@ -12,6 +12,7 @@
     padding-left: calc(36px + 14px) !important;
     padding-right: calc(36px - 14px) !important;
 }
+
 .js-c-wp_web3-signIn:hover,
 .js-c-wp_web3-signIn:focus,
 .js-c-wp_web3-signIn:active {

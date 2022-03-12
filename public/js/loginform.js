@@ -4,7 +4,7 @@
  * Example JavaScript code that interacts with the page and Web3 wallets
  */
 
- // Unpkg imports
+// Unpkg imports
 const Web3Modal = window.Web3Modal.default;
 const WalletConnectProvider = window.WalletConnectProvider.default;
 const Fortmatic = window.Fortmatic;
@@ -33,7 +33,7 @@ function init() {
 
   // Check that the web page is run in a secure context,
   // as otherwise MetaMask won't be available
-  if(location.protocol !== 'https:') {
+  if (location.protocol !== 'https:') {
     // https://ethereum.stackexchange.com/a/62217/620
     const alert = document.querySelector("#alert-error-https");
     alert.style.display = "block";
@@ -72,7 +72,7 @@ function init() {
 
   // hide p.forgetmenot
   document.querySelector("p.forgetmenot").style.display = "none";
-  
+
   // hide p.submit
   document.querySelector("p.submit").style.display = "none";
 
@@ -89,9 +89,9 @@ async function fetchAccountData() {
   let formData = {};
 
   function handleError(error) {
-      window.alert(error);
-      window.location.reload(true);
-      throw error;
+    window.alert(error);
+    window.location.reload(true);
+    throw error;
   }
 
   try {
@@ -126,27 +126,27 @@ async function fetchAccountData() {
     // log the user in
 
     formData = {
-        public_address: selectedAccount,
+      public_address: selectedAccount,
     };
 
     jQuery.post(
-        wp_web3_login.ajaxurl, {
-            action: 'wp_web3',
-            _ajax_nonce: wp_web3_login.nonce,
-            data: formData,
-        },
-        function (response) {
-            if (!response.success) {
-                handleError(response.data);
-            }
-            if (!response.success) return;
-            if (!response.data.redirect_url) return;
-
-            // redirect without caching.
-            let redirectUrl = response.data.redirect_url;
-            window.location.href = redirectUrl;
-
+      wp_web3_login.ajaxurl, {
+        action: 'wp_web3',
+        _ajax_nonce: wp_web3_login.nonce,
+        data: formData,
+      },
+      function (response) {
+        if (!response.success) {
+          handleError(response.data);
         }
+        if (!response.success) return;
+        if (!response.data.redirect_url) return;
+
+        // redirect without caching.
+        let redirectUrl = response.data.redirect_url;
+        window.location.href = redirectUrl;
+
+      }
     );
 
   } catch (error) {
@@ -191,7 +191,7 @@ async function onConnect(event) {
   console.log("Opening a dialog", web3Modal);
   try {
     provider = await web3Modal.connect();
-  } catch(e) {
+  } catch (e) {
     console.log("Could not get a wallet connection", e);
     return;
   }
@@ -224,7 +224,7 @@ async function onDisconnect(event) {
   console.log("Killing the wallet connection", provider);
 
   // TODO: Which providers have close method?
-  if(provider.close) {
+  if (provider.close) {
     await provider.close();
 
     // If the cached provider is not cleared,

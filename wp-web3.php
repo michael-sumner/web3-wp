@@ -34,10 +34,7 @@ function wp_web3_enqueue_scripts()
     wp_enqueue_script('evm-chains', 'https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js', array(), '1.0.0', true);
     wp_enqueue_script('@walletconnect', 'https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js', array(), '1.0.0', true);
     wp_enqueue_script('fortmatic', 'https://unpkg.com/fortmatic@2.0.6/dist/fortmatic.js', array(), '1.0.0', true);
-
     wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'public/js/loginform.js', array(), '1.0.0', true);
-
-    
     wp_localize_script('wp-web3', 'wp_web3_login', array(
         'nonce'     => wp_create_nonce('wp_web3_login_nonce'),
         'ajaxurl'   => admin_url('admin-ajax.php'),
@@ -46,8 +43,9 @@ function wp_web3_enqueue_scripts()
 }
 add_action('login_enqueue_scripts', 'wp_web3_enqueue_scripts');
 
-function wp_web3_login_form_button() {
-    ?>
+function wp_web3_login_form_button()
+{
+?>
     <div style="display: block; clear: both;"></div>
     <div id="prepare" style="text-align: center; margin-top: 1rem; display: none;">
         <button id="btn-connect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Connect wallet</button>
@@ -56,7 +54,7 @@ function wp_web3_login_form_button() {
     <div id="connected" style="text-align: center; margin-top: 1rem; display: none;">
         <button id="btn-disconnect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Disconnect wallet</button>
     </div>
-    <?php
+<?php
 }
 add_action('login_form', 'wp_web3_login_form_button');
 

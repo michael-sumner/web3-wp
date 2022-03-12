@@ -28,16 +28,37 @@ if (!defined('WPINC')) {
 
 function wp_web3_enqueue_scripts()
 {
-    wp_enqueue_style('wp-web3', plugin_dir_url(__FILE__) . 'static/css/app.css', array(), '1.0.0');
-    wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'static/js/web3.min.js', array(), '1.2.84', true);
-    wp_enqueue_script('wp-web3-app', plugin_dir_url(__FILE__) . 'static/js/app.js', array('jquery'), '1.0.0', true);
-    wp_localize_script('wp-web3', 'wp_web3_login', array(
-        'nonce'     => wp_create_nonce('wp_web3_login_nonce'),
-        'ajaxurl'   => admin_url('admin-ajax.php'),
-        'pluginurl' => plugin_dir_url(__FILE__),
-    ));
+    wp_enqueue_style('wp-web3', plugin_dir_url(__FILE__) . 'public/css/loginform.css', array(), '1.0.0');
+    wp_enqueue_script('web3', 'https://unpkg.com/web3@1.2.11/dist/web3.min.js', array(), '1.0.0', true);
+    wp_enqueue_script('web3modal', 'https://unpkg.com/web3modal@1.9.0/dist/index.js', array(), '1.0.0', true);
+    wp_enqueue_script('evm-chains', 'https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js', array(), '1.0.0', true);
+    wp_enqueue_script('@walletconnect', 'https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js', array(), '1.0.0', true);
+    wp_enqueue_script('fortmatic', 'https://unpkg.com/fortmatic@2.0.6/dist/fortmatic.js', array(), '1.0.0', true);
+
+    wp_enqueue_script('wp-web3-app', plugin_dir_url(__FILE__) . 'public/js/loginform.js', array(), '1.0.0', true);
+
+    
+    // wp_localize_script('wp-web3', 'wp_web3_login', array(
+    //     'nonce'     => wp_create_nonce('wp_web3_login_nonce'),
+    //     'ajaxurl'   => admin_url('admin-ajax.php'),
+    //     'pluginurl' => plugin_dir_url(__FILE__),
+    // ));
 }
 add_action('login_enqueue_scripts', 'wp_web3_enqueue_scripts');
+
+function wp_web3_login_form_button() {
+    ?>
+    <div style="display: block; clear: both;"></div>
+    <div id="prepare" style="text-align: center; margin-top: 1rem; display: none;">
+        <button id="btn-connect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Connect to a wallet</button>
+    </div>
+
+    <div id="connected" style="text-align: center; margin-top: 1rem; display: none;">
+        <button id="btn-disconnect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Disconnect wallet</button>
+    </div>
+    <?php
+}
+add_action('login_form', 'wp_web3_login_form_button');
 
 function wp_web3_login()
 {
@@ -102,8 +123,8 @@ function wp_web3_login()
 
     wp_send_json_success($data);
 }
-add_action('wp_ajax_wp_web3', 'wp_web3_login');
-add_action('wp_ajax_nopriv_wp_web3', 'wp_web3_login');
+// add_action('wp_ajax_wp_web3', 'wp_web3_login');
+// add_action('wp_ajax_nopriv_wp_web3', 'wp_web3_login');
 
 /**
  * On user post meta update, if it contains an eth address, then sign the user out, for security.
@@ -134,4 +155,4 @@ function wp_web3_user_public_address_updated($meta_id, $object_id, $meta_key, $_
         $sessions->destroy_all();
     }
 }
-add_action('updated_user_meta', 'wp_web3_user_public_address_updated', 10, 4);
+// add_action('updated_user_meta', 'wp_web3_user_public_address_updated', 10, 4);

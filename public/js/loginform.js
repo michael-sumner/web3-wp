@@ -86,33 +86,73 @@ function init() {
  */
 async function fetchAccountData() {
 
-  // Get a Web3 instance for the wallet
-  const web3 = new Web3(provider);
+  let formData = {};
 
-  console.log("Web3 instance is", web3);
+  function handleError(error) {
+      window.alert(error);
+      window.location.reload(true);
+      throw error;
+  }
 
-  // Get connected chain id from Ethereum node
-  const chainId = await web3.eth.getChainId();
-  // Load chain information over an HTTP API
-  const chainData = evmChains.getChain(chainId);
+  try {
+    // Get a Web3 instance for the wallet
+    const web3 = new Web3(provider);
 
-  // todo add to database
-  console.log('network-name', chainData.name);
+    console.log("Web3 instance is", web3);
 
-  // Get list of accounts of the connected wallet
-  const accounts = await web3.eth.getAccounts();
+    // Get connected chain id from Ethereum node
+    const chainId = await web3.eth.getChainId();
+    // Load chain information over an HTTP API
+    const chainData = evmChains.getChain(chainId);
 
-  // MetaMask does not give you all accounts, only the selected account
-  console.log("Got accounts", accounts);
-  selectedAccount = accounts[0];
+    // todo add to database
+    console.log('network-name', chainData.name);
 
-  // todo add to database
-  console.log('accounts', accounts);
-  console.log('selectedAccount', selectedAccount);
+    // Get list of accounts of the connected wallet
+    const accounts = await web3.eth.getAccounts();
 
-  // Display fully loaded UI for wallet data
-  document.querySelector("#prepare").style.display = "none";
-  document.querySelector("#connected").style.display = "block";
+    // MetaMask does not give you all accounts, only the selected account
+    console.log("Got accounts", accounts);
+    selectedAccount = accounts[0];
+
+    // todo add to database
+    console.log('accounts', accounts);
+    console.log('selectedAccount', selectedAccount);
+
+    // Display fully loaded UI for wallet data
+    document.querySelector("#prepare").style.display = "none";
+    document.querySelector("#connected").style.display = "block";
+
+    // log the user in
+
+    formData = {
+        public_address: selectedAccount,
+    };
+
+    jQuery.post(
+        wp_web3_login.ajaxurl, {
+            action: 'wp_web3',
+            _ajax_nonce: wp_web3_login.nonce,
+            data: formData,
+        },
+        function (response) {
+            if (!response.success) {
+                handleError(response.data);
+            }
+            if (!response.success) return;
+            if (!response.data.redirect_url) return;
+
+            // redirect without caching.
+            let redirectUrl = response.data.redirect_url;
+            window.location.href = redirectUrl;
+
+        }
+    );
+
+  } catch (error) {
+    handleError(error);
+  }
+
 }
 
 

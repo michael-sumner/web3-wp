@@ -71,12 +71,14 @@ function wp_web3_login()
     $public_address = sanitize_post($post_data['public_address'], 'raw');
 
     if (empty($public_address)) {
-        wp_send_json_error('Address does not exist.');
+        wp_send_json_error(
+            __('Address does not exist.', 'wp-web3'),
+        );
     }
 
     // search for user within usermeta.
     global $wpdb;
-    $like = '%' . $wpdb->esc_like($public_address[0]) . '%';
+    $like = '%' . $wpdb->esc_like($public_address) . '%';
     $user = $wpdb->get_row(
         $wpdb->prepare(
             "SELECT *
@@ -89,12 +91,14 @@ function wp_web3_login()
     );
 
     if (!$user) {
-        wp_send_json_error(
-            wp_sprintf(
-                __('User with Web3 address %s does not exist.', 'wp-web3'),
-                $public_address[0]
-            )
-        );
+        if (!empty($public_address)) {
+            wp_send_json_error(
+                wp_sprintf(
+                    __('WordPress user with Web3 address %s does not exist.', 'wp-web3'),
+                    $public_address
+                )
+            );
+        }
     }
 
     update_user_caches($user);

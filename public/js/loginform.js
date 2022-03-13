@@ -66,17 +66,34 @@ function init() {
     cacheProvider: false, // optional
     providerOptions, // required
     disableInjectedProvider: false, // optional. For MetaMask / Brave / Opera.
+    theme: "dark",
   });
 
   console.log("Web3Modal instance is", web3Modal);
 
-  // hide p.forgetmenot
-  document.querySelector("p.forgetmenot").style.display = "none";
+  // remove unnecessary fields.
 
-  // hide p.submit
-  document.querySelector("p.submit").style.display = "none";
+  // remove #loginform #user_login closest p
+  if (document.querySelector("#loginform #user_login") !== null) {
+    document.querySelector("#loginform #user_login").closest('p').remove();
+  }
+  // remove #loginform .user-pass-wrap
+  if (document.querySelector("#loginform .user-pass-wrap") !== null) {
+    document.querySelector("#loginform .user-pass-wrap").remove();
+  }
+    
+  // remove #loginform #wp-submit
+  if (document.querySelector("#loginform #wp-submit") !== null) {
+    document.querySelector("#loginform #wp-submit").remove();
+  }
+    
+  // remove #loginform .forgetmenot
+  if (document.querySelector("#loginform .forgetmenot") !== null) {
+    document.querySelector("#loginform .forgetmenot").remove();
+  }
 
   document.querySelector("#connected").style.display = "none";
+
   document.querySelector("#prepare").style.display = "block";
 }
 
@@ -171,6 +188,28 @@ async function refreshAccountData() {
   document.querySelector("#connected").style.display = "none";
   document.querySelector("#prepare").style.display = "block";
 
+
+  // remove unnecessary fields.
+
+  // remove #loginform #user_login closest p
+  if (document.querySelector("#loginform #user_login") !== null) {
+    document.querySelector("#loginform #user_login").closest('p').remove();
+  }
+  // remove #loginform .user-pass-wrap
+  if (document.querySelector("#loginform .user-pass-wrap") !== null) {
+    document.querySelector("#loginform .user-pass-wrap").remove();
+  }
+    
+  // remove #loginform #wp-submit
+  if (document.querySelector("#loginform #wp-submit") !== null) {
+    document.querySelector("#loginform #wp-submit").remove();
+  }
+    
+  // remove #loginform .forgetmenot
+  if (document.querySelector("#loginform .forgetmenot") !== null) {
+    document.querySelector("#loginform .forgetmenot").remove();
+  }
+
   // Disable button while UI is loading.
   // fetchAccountData() will take a while as it communicates
   // with Ethereum node via JSON-RPC and loads chain data
@@ -240,6 +279,30 @@ async function onDisconnect(event) {
   // Set the UI back to the initial state
   document.querySelector("#prepare").style.display = "block";
   document.querySelector("#connected").style.display = "none";
+
+
+  // remove unnecessary fields.
+
+  // remove #loginform #user_login closest p
+  if (document.querySelector("#loginform #user_login") !== null) {
+    document.querySelector("#loginform #user_login").closest('p').remove();
+  }
+  // remove #loginform .user-pass-wrap
+  if (document.querySelector("#loginform .user-pass-wrap") !== null) {
+    document.querySelector("#loginform .user-pass-wrap").remove();
+  }
+    
+  // remove #loginform #wp-submit
+  if (document.querySelector("#loginform #wp-submit") !== null) {
+    document.querySelector("#loginform #wp-submit").remove();
+  }
+    
+  // remove #loginform .forgetmenot
+  if (document.querySelector("#loginform .forgetmenot") !== null) {
+    document.querySelector("#loginform .forgetmenot").remove();
+  }
+    
+
 }
 
 

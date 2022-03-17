@@ -109,11 +109,9 @@ if (!class_exists('WPWeb3_0')) {
         public function enqueue_scripts()
         {
             wp_enqueue_style('wp-web3', plugin_dir_url(__FILE__) . 'public/css/loginform.css', array(), $this->get_version());
-            wp_enqueue_script('web3', 'https://unpkg.com/web3@1.2.11/dist/web3.min.js', array(), $this->get_version(), true);
-            wp_enqueue_script('web3modal', 'https://unpkg.com/web3modal@1.9.0/dist/index.js', array(), $this->get_version(), true);
-            wp_enqueue_script('evm-chains', 'https://unpkg.com/evm-chains@0.2.0/dist/umd/index.min.js', array(), $this->get_version(), true);
-            wp_enqueue_script('@walletconnect', 'https://unpkg.com/@walletconnect/web3-provider@1.2.1/dist/umd/index.min.js', array(), $this->get_version(), true);
-            wp_enqueue_script('fortmatic', 'https://unpkg.com/fortmatic@2.0.6/dist/fortmatic.js', array(), $this->get_version(), true);
+            wp_enqueue_script('web3', plugin_dir_url(__FILE__) . 'public/js/web3.min.js', array(), '1.2.11', true);
+            wp_enqueue_script('web3modal', plugin_dir_url(__FILE__) . 'public/js/web3modal/dist/index.js', array(), '1.9.0', true);
+            wp_enqueue_script('evm-chains', plugin_dir_url(__FILE__) . 'public/js/evm-chains/dist/umd/index.min.js', array(), '0.2.0', true);
             wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'public/js/loginform.js', array(), $this->get_version(), true);
 
             wp_localize_script('wp-web3', 'wp_web3_login', array(

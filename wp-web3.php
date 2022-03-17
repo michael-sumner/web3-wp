@@ -7,13 +7,13 @@
  * Version: 2.2.3
  * Requires at least: 4.0
  * Requires PHP: 5.6
- * Author: Michael Bryan Sumner
- * Author URI: https://smnr.co/wp-web3
+ * Author: Bioneer Ltd
+ * Author URI: https://bioneer.ai/
  * License: GPL-2.0+
  * Text Domain: wp-web3
  * Domain Path: /languages
  *
- * @link https://smnr.co/wp-web3
+ * @link https://bioneer.ai/
  * @since 2.2.3
  * @package WP_Web3
  */

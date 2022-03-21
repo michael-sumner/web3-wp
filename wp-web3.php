@@ -85,7 +85,6 @@ if (!class_exists('Web3_0_WP')) {
          */
         private function activate_filters()
         {
-            // add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'add_settings_link'));
         }
 
         /**

@@ -15,7 +15,7 @@
  *
  * @link https://bioneer.ai/
  * @since 1.0.0
- * @package WP_Web3
+ * @package Web3_WP
  */
 
 // If this file is called directly, abort.
@@ -23,10 +23,10 @@ if (!defined('WPINC')) {
     die('Hey there...');
 }
 
-define('WP_WEB3_VERSION', '1.0.0');
+define('WEB3_WP_VERSION', '1.0.0');
 
-if (!class_exists('WPWeb3_0')) {
-    class WPWeb3_0
+if (!class_exists('Web3_0_WP')) {
+    class Web3_0_WP
     {
         /**
          * The current version of the plugin.
@@ -47,8 +47,8 @@ if (!class_exists('WPWeb3_0')) {
          */
         public function __construct()
         {
-            if (defined('WP_WEB3_VERSION')) {
-                $this->version = WP_WEB3_VERSION;
+            if (defined('WEB3_WP_VERSION')) {
+                $this->version = WEB3_WP_VERSION;
             } else {
                 $this->version = '1.0.0';
             }
@@ -68,8 +68,8 @@ if (!class_exists('WPWeb3_0')) {
         {
             add_action('login_enqueue_scripts', array($this, 'enqueue_scripts'));
             add_action('login_form', array($this, 'login_form_button'));
-            add_action('wp_ajax_wp_web3', array($this, 'login'));
-            add_action('wp_ajax_nopriv_wp_web3', array($this, 'login'));
+            add_action('wp_ajax_web3_wp', array($this, 'login'));
+            add_action('wp_ajax_nopriv_web3_wp', array($this, 'login'));
             add_action('updated_user_meta', array($this, 'user_public_address_updated'), 10, 4);
 
             // add_action user_profile_fields
@@ -114,8 +114,8 @@ if (!class_exists('WPWeb3_0')) {
             wp_enqueue_script('evm-chains', plugin_dir_url(__FILE__) . 'public/js/evm-chains/dist/umd/index.min.js', array(), '0.2.0', true);
             wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'public/js/loginform.js', array(), $this->get_version(), true);
 
-            wp_localize_script('wp-web3', 'wp_web3_login', array(
-                'nonce'               => wp_create_nonce('wp_web3_login_nonce'),
+            wp_localize_script('wp-web3', 'web3_wp_login', array(
+                'nonce'               => wp_create_nonce('web3_wp_login_nonce'),
                 'ajaxurl'             => admin_url('admin-ajax.php'),
                 'pluginurl'           => plugin_dir_url(__FILE__),
             ));
@@ -135,11 +135,11 @@ if (!class_exists('WPWeb3_0')) {
                 <div id="alert-error-metamask" style="display: none;">Metamask is not installed</div>
             </div>
             <div id="prepare" style="text-align: center; margin-top: 1rem; display: none;">
-                <button id="btn-connect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Connect wallet</button>
+                <button id="btn-connect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-web3_wp-signIn">Connect wallet</button>
             </div>
 
             <div id="connected" style="text-align: center; margin-top: 1rem; display: none;">
-                <button id="btn-disconnect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-wp_web3-signIn">Disconnect wallet</button>
+                <button id="btn-disconnect" type="button" class="button button-secondary button-hero hide-if-no-js js-c-web3_wp-signIn">Disconnect wallet</button>
             </div>
             <?php
         }
@@ -152,7 +152,7 @@ if (!class_exists('WPWeb3_0')) {
          */
         public function login()
         {
-            check_ajax_referer('wp_web3_login_nonce');
+            check_ajax_referer('web3_wp_login_nonce');
 
             if (!isset($_POST['data'])) {
                 wp_send_json_error();
@@ -175,7 +175,7 @@ if (!class_exists('WPWeb3_0')) {
                 $wpdb->prepare(
                     "SELECT *
                     FROM $wpdb->usermeta
-                    WHERE `meta_key` = 'wp_web3_public_address' AND
+                    WHERE `meta_key` = 'web3_wp_public_address' AND
                     `meta_value` LIKE %s
                     LIMIT 1",
                     $like
@@ -203,7 +203,7 @@ if (!class_exists('WPWeb3_0')) {
             }
 
             // update user meta.
-            update_user_meta($user_id, 'wp_web3_public_address', $public_address);
+            update_user_meta($user_id, 'web3_wp_public_address', $public_address);
 
             // log the user in.
             wp_set_auth_cookie($user_id);
@@ -229,7 +229,7 @@ if (!class_exists('WPWeb3_0')) {
          */
         public function user_public_address_updated($meta_id, $object_id, $meta_key, $_meta_value)
         {
-            if ($meta_key !== 'wp_web3_public_address') {
+            if ($meta_key !== 'web3_wp_public_address') {
                 return;
             }
 
@@ -251,14 +251,14 @@ if (!class_exists('WPWeb3_0')) {
         // add a custom user field in the user page
         public function user_profile_fields($user)
         {
-            $public_address = get_user_meta($user->ID, 'wp_web3_public_address', true);
+            $public_address = get_user_meta($user->ID, 'web3_wp_public_address', true);
             ?>
             <h3><?php _e('Web3', 'wp-web3'); ?></h3>
             <table class="form-table">
                 <tr>
-                    <th><label for="wp_web3_public_address"><?php _e('Web3 Address', 'wp-web3'); ?></label></th>
+                    <th><label for="web3_wp_public_address"><?php _e('Web3 Address', 'wp-web3'); ?></label></th>
                     <td>
-                        <input type="text" name="wp_web3_public_address" id="wp_web3_public_address" value="<?php echo esc_attr($public_address); ?>" class="regular-text" />
+                        <input type="text" name="web3_wp_public_address" id="web3_wp_public_address" value="<?php echo esc_attr($public_address); ?>" class="regular-text" />
                         <p class="description"><?php _e('Enter your Web3 address here.', 'wp-web3'); ?></p>
                     </td>
                 </tr>
@@ -267,4 +267,4 @@ if (!class_exists('WPWeb3_0')) {
         }
     }
 }
-$wp_web3_0 = new WPWeb3_0();
+$web3_wp_0 = new Web3_0_WP();

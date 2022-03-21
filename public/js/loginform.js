@@ -156,9 +156,9 @@ async function fetchAccountData() {
     };
 
     jQuery.post(
-      wp_web3_login.ajaxurl, {
-        action: 'wp_web3',
-        _ajax_nonce: wp_web3_login.nonce,
+      web3_wp_login.ajaxurl, {
+        action: 'web3_wp',
+        _ajax_nonce: web3_wp_login.nonce,
         data: formData,
       },
       function (response) {

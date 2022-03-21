@@ -1,4 +1,4 @@
-.js-c-wp_web3-signIn {
+.js-c-web3_wp-signIn {
     width: 100%;
     background-color: #1c1ce1 !important;
     color: #fff !important;
@@ -13,9 +13,9 @@
     padding-right: calc(36px - 14px) !important;
 }
 
-.js-c-wp_web3-signIn:hover,
-.js-c-wp_web3-signIn:focus,
-.js-c-wp_web3-signIn:active {
+.js-c-web3_wp-signIn:hover,
+.js-c-web3_wp-signIn:focus,
+.js-c-web3_wp-signIn:active {
     box-shadow: none !important;
     border-color: rgba(28, 28, 225, 0.8) !important;
     background-color: rgba(28, 28, 225, 0.8) !important;

@@ -4,7 +4,7 @@
  * @wordpress-plugin
  * Plugin Name: WP Web 3.0
  * Description: Allow your users to log into your WordPress site using Web 3.0 sign-on.
- * Version: 2.2.3
+ * Version: 1.0.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
  * Author: Bioneer Ltd
@@ -14,7 +14,7 @@
  * Domain Path: /languages
  *
  * @link https://bioneer.ai/
- * @since 2.2.3
+ * @since 1.0.0
  * @package WP_Web3
  */
 
@@ -23,7 +23,7 @@ if (!defined('WPINC')) {
     die('Hey there...');
 }
 
-define('WP_WEB3_VERSION', '2.2.3');
+define('WP_WEB3_VERSION', '1.0.0');
 
 if (!class_exists('WPWeb3_0')) {
     class WPWeb3_0
@@ -31,7 +31,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * The current version of the plugin.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @access protected
          * @var string $version The current version of the plugin.
          */
@@ -43,14 +43,14 @@ if (!class_exists('WPWeb3_0')) {
          * Set the plugin version that can be used throughout the plugin.
          * Set the hooks.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          */
         public function __construct()
         {
             if (defined('WP_WEB3_VERSION')) {
                 $this->version = WP_WEB3_VERSION;
             } else {
-                $this->version = '2.2.3';
+                $this->version = '1.0.0';
             }
 
             // Activate hooks
@@ -61,7 +61,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * Register listeners for actions.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @return void
          */
         private function activate_actions()
@@ -80,7 +80,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * Register listeners for filters.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @return void
          */
         private function activate_filters()
@@ -91,7 +91,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * Retrieve the version number of the plugin.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @return string The version number of the plugin.
          */
         public function get_version()
@@ -103,7 +103,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * Enqueue admin scripts.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @return void
          */
         public function enqueue_scripts()
@@ -124,7 +124,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * Login Form Button.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @return void
          */
         public function login_form_button()
@@ -147,7 +147,7 @@ if (!class_exists('WPWeb3_0')) {
         /**
          * Login functionality.
          *
-         * @since 2.2.3 WP Web 3.0
+         * @since 1.0.0 WP Web 3.0
          * @return void
          */
         public function login()

@@ -2,15 +2,15 @@
 
 /**
  * @wordpress-plugin
- * Plugin Name: Web 3.0 WP
- * Description: Allow your users to log into your WordPress site using Web 3.0 sign-on.
+ * Plugin Name: Web3 WP
+ * Description: Allow your users to log into your WordPress site using Web3 sign-on.
  * Version: 1.0.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
  * Author: Bioneer Ltd
  * Author URI: https://bioneer.ai/
  * License: GPL-2.0+
- * Text Domain: wp-web3
+ * Text Domain: web3-wp
  * Domain Path: /languages
  *
  * @link https://bioneer.ai/
@@ -25,13 +25,13 @@ if (!defined('WPINC')) {
 
 define('WEB3_WP_VERSION', '1.0.0');
 
-if (!class_exists('Web3_0_WP')) {
-    class Web3_0_WP
+if (!class_exists('Web3_WP')) {
+    class Web3_WP
     {
         /**
          * The current version of the plugin.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @access protected
          * @var string $version The current version of the plugin.
          */
@@ -43,7 +43,7 @@ if (!class_exists('Web3_0_WP')) {
          * Set the plugin version that can be used throughout the plugin.
          * Set the hooks.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          */
         public function __construct()
         {
@@ -61,7 +61,7 @@ if (!class_exists('Web3_0_WP')) {
         /**
          * Register listeners for actions.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @return void
          */
         private function activate_actions()
@@ -80,7 +80,7 @@ if (!class_exists('Web3_0_WP')) {
         /**
          * Register listeners for filters.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @return void
          */
         private function activate_filters()
@@ -90,7 +90,7 @@ if (!class_exists('Web3_0_WP')) {
         /**
          * Retrieve the version number of the plugin.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @return string The version number of the plugin.
          */
         public function get_version()
@@ -102,18 +102,18 @@ if (!class_exists('Web3_0_WP')) {
         /**
          * Enqueue admin scripts.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @return void
          */
         public function enqueue_scripts()
         {
-            wp_enqueue_style('wp-web3', plugin_dir_url(__FILE__) . 'public/css/loginform.css', array(), $this->get_version());
+            wp_enqueue_style('web3-wp', plugin_dir_url(__FILE__) . 'public/css/loginform.css', array(), $this->get_version());
             wp_enqueue_script('web3', plugin_dir_url(__FILE__) . 'public/js/web3.min.js', array(), '1.2.11', true);
             wp_enqueue_script('web3modal', plugin_dir_url(__FILE__) . 'public/js/web3modal/dist/index.js', array(), '1.9.0', true);
             wp_enqueue_script('evm-chains', plugin_dir_url(__FILE__) . 'public/js/evm-chains/dist/umd/index.min.js', array(), '0.2.0', true);
-            wp_enqueue_script('wp-web3', plugin_dir_url(__FILE__) . 'public/js/loginform.js', array(), $this->get_version(), true);
+            wp_enqueue_script('web3-wp', plugin_dir_url(__FILE__) . 'public/js/loginform.js', array(), $this->get_version(), true);
 
-            wp_localize_script('wp-web3', 'web3_wp_login', array(
+            wp_localize_script('web3-wp', 'web3_wp_login', array(
                 'nonce'               => wp_create_nonce('web3_wp_login_nonce'),
                 'ajaxurl'             => admin_url('admin-ajax.php'),
                 'pluginurl'           => plugin_dir_url(__FILE__),
@@ -123,7 +123,7 @@ if (!class_exists('Web3_0_WP')) {
         /**
          * Login Form Button.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @return void
          */
         public function login_form_button()
@@ -146,7 +146,7 @@ if (!class_exists('Web3_0_WP')) {
         /**
          * Login functionality.
          *
-         * @since 1.0.0 Web 3.0 WP
+         * @since 1.0.0 Web3 WP
          * @return void
          */
         public function login()
@@ -163,7 +163,7 @@ if (!class_exists('Web3_0_WP')) {
 
             if (empty($public_address)) {
                 wp_send_json_error(
-                    __('Address does not exist.', 'wp-web3'),
+                    __('Address does not exist.', 'web3-wp'),
                 );
             }
 
@@ -185,7 +185,7 @@ if (!class_exists('Web3_0_WP')) {
                 if (!empty($public_address)) {
                     wp_send_json_error(
                         wp_sprintf(
-                            __('WordPress user with Web3 address %s does not exist.', 'wp-web3'),
+                            __('WordPress user with Web3 address %s does not exist.', 'web3-wp'),
                             $public_address
                         )
                     );
@@ -252,13 +252,13 @@ if (!class_exists('Web3_0_WP')) {
         {
             $public_address = get_user_meta($user->ID, 'web3_wp_public_address', true);
             ?>
-            <h3><?php _e('Web3', 'wp-web3'); ?></h3>
+            <h3><?php _e('Web3', 'web3-wp'); ?></h3>
             <table class="form-table">
                 <tr>
-                    <th><label for="web3_wp_public_address"><?php _e('Web3 Address', 'wp-web3'); ?></label></th>
+                    <th><label for="web3_wp_public_address"><?php _e('Web3 Address', 'web3-wp'); ?></label></th>
                     <td>
                         <input type="text" name="web3_wp_public_address" id="web3_wp_public_address" value="<?php echo esc_attr($public_address); ?>" class="regular-text" />
-                        <p class="description"><?php _e('Enter your Web3 address here.', 'wp-web3'); ?></p>
+                        <p class="description"><?php _e('Enter your Web3 address here.', 'web3-wp'); ?></p>
                     </td>
                 </tr>
             </table>
@@ -266,4 +266,4 @@ if (!class_exists('Web3_0_WP')) {
         }
     }
 }
-$web3_wp_0 = new Web3_0_WP();
+$Web3_WP = new Web3_WP();

@@ -7,6 +7,7 @@
  * Version: 1.0.0
  * Requires at least: 4.0
  * Requires PHP: 5.6
+ * Tested up to: 5.9.2
  * Author: Bioneer Ltd
  * Author URI: https://bioneer.ai/
  * License: GPL-2.0+

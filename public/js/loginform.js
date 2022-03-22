@@ -9,7 +9,7 @@ const Web3Modal = window.Web3Modal.default;
 const evmChains = window.evmChains;
 
 // Web3modal instance
-let web3Modal
+let web3Modal;
 
 // Chosen wallet provider given by the dialog window
 let provider;

@@ -75,6 +75,13 @@ if (!class_exists('Web3_WP')) {
             // add_action user_profile_fields
             add_action('show_user_profile', array($this, 'user_profile_fields'));
             add_action('edit_user_profile', array($this, 'user_profile_fields'));
+
+            // save user_profile_fields
+            add_action('personal_options_update', array($this, 'update_profile_fields'));
+            add_action('edit_user_profile_update', array($this, 'update_profile_fields'));
+
+            // error messages
+            add_action( 'user_profile_update_errors', array($this, 'user_profile_update_errors'), 10, 3 );
         }
 
         /**
@@ -157,8 +164,8 @@ if (!class_exists('Web3_WP')) {
                 wp_send_json_error();
             }
 
-            // retrieve values and sanitize.
-            $post_data      = $_POST['data'];
+            // retrieve values and sanitize $_POST.
+            $post_data = sanitize_post($_POST['data'], 'raw');
             $public_address = sanitize_post($post_data['public_address'], 'raw');
 
             if (empty($public_address)) {
@@ -263,6 +270,28 @@ if (!class_exists('Web3_WP')) {
                 </tr>
             </table>
             <?php
+        }
+
+        public function update_profile_fields($user_id)
+        {
+            if (!current_user_can('edit_user', $user_id)) {
+                return false;
+            }
+
+            $public_address = (string) sanitize_post($_POST['web3_wp_public_address'], 'raw');
+
+            if (!empty($public_address) && preg_match('/^0x[a-fA-F\d]{40}$/', $public_address)) {
+                update_user_meta($user_id, 'web3_wp_public_address', $public_address);
+            }
+        }
+
+        public function user_profile_update_errors($errors, $update, $user)
+        {
+            $public_address = (string) sanitize_post($_POST['web3_wp_public_address'], 'raw');
+
+            if (!empty($public_address) && !preg_match('/^0x[a-fA-F\d]{40}$/', $public_address)) {
+                $errors->add('web3_wp_public_address_error', __('<strong>Error</strong>: Please enter a valid Web3 address.', 'web3-wp'));
+            }
         }
     }
 }

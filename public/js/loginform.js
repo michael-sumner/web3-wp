@@ -6,8 +6,6 @@
 
 // Unpkg imports
 const Web3Modal = window.Web3Modal.default;
-// const WalletConnectProvider = window.WalletConnectProvider.default;
-// const Fortmatic = window.Fortmatic;
 const evmChains = window.evmChains;
 
 // Web3modal instance
@@ -25,12 +23,6 @@ let selectedAccount;
  * Setup the orchestra
  */
 function init() {
-
-  // console.log("Initializing example");
-  // console.log("WalletConnectProvider is", WalletConnectProvider);
-  // console.log("Fortmatic is", Fortmatic);
-  // console.log("window.web3 is", window.web3, "window.ethereum is", window.ethereum);
-
   // Check that the web page is run in a secure context,
   // as otherwise MetaMask won't be available
   if (location.protocol !== 'https:') {
@@ -51,24 +43,7 @@ function init() {
   // Tell Web3modal what providers we have available.
   // Built-in web browser provider (only one can exist as a time)
   // like MetaMask, Brave or Opera is added automatically by Web3modal
-  const providerOptions = {
-    // walletconnect: {
-    //   package: WalletConnectProvider,
-    //   options: {
-    //     // Mikko's test key - don't copy as your mileage may vary
-    //     infuraId: "8043bb2cf99347b1bfadfb233c5325c0",
-    //   }
-    // },
-
-    // fortmatic: {
-    //   package: Fortmatic,
-    //   options: {
-    //     // Mikko's TESTNET api key
-    //     key: "pk_test_391E26A3B43A3350"
-    //   }
-    // }
-
-  };
+  const providerOptions = {};
 
   web3Modal = new Web3Modal({
     cacheProvider: false, // optional
@@ -78,7 +53,7 @@ function init() {
     showQRCode: true,
   });
 
-  // console.log("Web3Modal instance is", web3Modal);
+
 
   // remove unnecessary fields.
 
@@ -90,12 +65,12 @@ function init() {
   if (document.querySelector("#loginform .user-pass-wrap") !== null) {
     document.querySelector("#loginform .user-pass-wrap").remove();
   }
-    
+
   // remove #loginform #wp-submit
   if (document.querySelector("#loginform #wp-submit") !== null) {
     document.querySelector("#loginform #wp-submit").remove();
   }
-    
+
   // remove #loginform .forgetmenot
   if (document.querySelector("#loginform .forgetmenot") !== null) {
     document.querySelector("#loginform .forgetmenot").remove();
@@ -124,7 +99,7 @@ async function fetchAccountData() {
     // Get a Web3 instance for the wallet
     const web3 = new Web3(provider);
 
-    // console.log("Web3 instance is", web3);
+
 
     // Get connected chain id from Ethereum node
     const chainId = await web3.eth.getChainId();
@@ -132,18 +107,18 @@ async function fetchAccountData() {
     const chainData = evmChains.getChain(chainId);
 
     // todo add to database
-    // console.log('network-name', chainData.name);
+
 
     // Get list of accounts of the connected wallet
     const accounts = await web3.eth.getAccounts();
 
     // MetaMask does not give you all accounts, only the selected account
-    // console.log("Got accounts", accounts);
+
     selectedAccount = accounts[0];
 
     // todo add to database
-    // console.log('accounts', accounts);
-    // console.log('selectedAccount', selectedAccount);
+
+
 
     // Display fully loaded UI for wallet data
     document.querySelector("#prepare").style.display = "none";
@@ -208,12 +183,12 @@ async function refreshAccountData() {
   if (document.querySelector("#loginform .user-pass-wrap") !== null) {
     document.querySelector("#loginform .user-pass-wrap").remove();
   }
-    
+
   // remove #loginform #wp-submit
   if (document.querySelector("#loginform #wp-submit") !== null) {
     document.querySelector("#loginform #wp-submit").remove();
   }
-    
+
   // remove #loginform .forgetmenot
   if (document.querySelector("#loginform .forgetmenot") !== null) {
     document.querySelector("#loginform .forgetmenot").remove();
@@ -236,11 +211,11 @@ async function onConnect(event) {
 
   event.preventDefault();
 
-  // console.log("Opening a dialog", web3Modal);
+
   try {
     provider = await web3Modal.connect();
   } catch (e) {
-    // console.log("Could not get a wallet connection", e);
+
     return;
   }
 
@@ -269,7 +244,7 @@ async function onDisconnect(event) {
 
   event.preventDefault();
 
-  // console.log("Killing the wallet connection", provider);
+
 
   // TODO: Which providers have close method?
   if (provider.close) {
@@ -300,17 +275,17 @@ async function onDisconnect(event) {
   if (document.querySelector("#loginform .user-pass-wrap") !== null) {
     document.querySelector("#loginform .user-pass-wrap").remove();
   }
-    
+
   // remove #loginform #wp-submit
   if (document.querySelector("#loginform #wp-submit") !== null) {
     document.querySelector("#loginform #wp-submit").remove();
   }
-    
+
   // remove #loginform .forgetmenot
   if (document.querySelector("#loginform .forgetmenot") !== null) {
     document.querySelector("#loginform .forgetmenot").remove();
   }
-    
+
 
 }
 

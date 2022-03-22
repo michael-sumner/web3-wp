@@ -3,7 +3,7 @@ Contributors: xmic
 Requires at least: 4.0
 Requires PHP: 5.6
 Tested up to: 5.9.2
-Stable tag: trunk
+Stable tag: 1.0.0
 License: GPLv3
 
 Allow your users to log into your WordPress site using Web3 sign-on.

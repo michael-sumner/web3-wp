@@ -9,12 +9,12 @@
  * Requires PHP: 5.6
  * Tested up to: 5.9.2
  * Author: Bioneer Ltd
- * Author URI: https://bioneer.ai/
+ * Author URI: https://bioneer.ai/l/web3-wp
  * License: GPL-2.0+
  * Text Domain: web3-wp
  * Domain Path: /languages
  *
- * @link https://bioneer.ai/
+ * @link https://bioneer.ai/l/web3-wp
  * @since 1.0.0
  * @package Web3_WP
  */

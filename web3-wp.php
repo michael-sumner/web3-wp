@@ -9,12 +9,12 @@
  * Requires PHP: 5.6
  * Tested up to: 5.9.2
  * Author: Bioneer Ltd
- * Author URI: https://bioneer.ai/
+ * Author URI: https://bioneer.ai/l/web3-wp
  * License: GPL-2.0+
  * Text Domain: web3-wp
  * Domain Path: /languages
  *
- * @link https://bioneer.ai/
+ * @link https://bioneer.ai/l/web3-wp
  * @since 1.0.0
  * @package Web3_WP
  */
@@ -25,6 +25,8 @@ if (!defined('WPINC')) {
 }
 
 define('WEB3_WP_VERSION', '1.0.0');
+
+require __DIR__ . '/vendor/autoload.php';
 
 if (!class_exists('Web3_WP')) {
     class Web3_WP
@@ -82,7 +84,7 @@ if (!class_exists('Web3_WP')) {
             add_action('edit_user_profile_update', array($this, 'update_profile_fields'));
 
             // error messages
-            add_action( 'user_profile_update_errors', array($this, 'user_profile_update_errors'), 10, 3 );
+            add_action('user_profile_update_errors', array($this, 'user_profile_update_errors'), 10, 3);
         }
 
         /**
@@ -166,7 +168,7 @@ if (!class_exists('Web3_WP')) {
             }
 
             // retrieve values and sanitize $_POST.
-            $post_data = sanitize_post($_POST['data'], 'raw');
+            $post_data      = sanitize_post($_POST['data'], 'raw');
             $public_address = sanitize_post($post_data['public_address'], 'raw');
 
             if (empty($public_address)) {
@@ -294,6 +296,38 @@ if (!class_exists('Web3_WP')) {
                 $errors->add('web3_wp_public_address_error', __('<strong>Error</strong>: Please enter a valid Web3 address.', 'web3-wp'));
             }
         }
+
+        /**
+         * Initialize the plugin tracker
+         *
+         * @return void
+         */
+        public static function appsero_init_tracker()
+        {
+
+            if (!class_exists('Appsero\Client')) {
+                require_once __DIR__ . '/vendor/appsero/src/Client.php';
+            }
+
+            $client = new Appsero\Client('228303d0-01b3-4aa6-9b41-b055a598503f', 'Web3 WP', __FILE__);
+
+            // Active insights
+            $client->insights()->init();
+
+            // Active automatic updater
+            $client->updater();
+
+            // Active license page and checker
+            $args = array(
+                'type'       => 'options',
+                'menu_title' => 'Web3 WP',
+                'page_title' => 'Web3 WP Settings',
+                'menu_slug'  => 'web3_wp_settings',
+            );
+            $client->license()->add_settings_page($args);
+        }
     }
 }
+
 $Web3_WP = new Web3_WP();
+$Web3_WP::appsero_init_tracker();
